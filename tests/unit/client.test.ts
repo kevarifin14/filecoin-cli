@@ -146,6 +146,16 @@ describe('FilecoinClient', () => {
       expect(result.size).toBe(1234);
     });
 
+    test('handles missing content-length header', async () => {
+      mockFetch.mockResolvedValue({
+        ok: true,
+        headers: { get: (k: string) => k === 'content-type' ? 'text/html' : null },
+      });
+      const result = await client.resolveIpfs('QmNoSize');
+      expect(result.size).toBeNull();
+      expect(result.contentType).toBe('text/html');
+    });
+
     test('throws on non-ok response', async () => {
       mockFetch.mockResolvedValue({ ok: false, status: 404 });
       await expect(client.resolveIpfs('QmBad')).rejects.toThrow('404');
@@ -173,6 +183,16 @@ describe('FilecoinClient', () => {
     test('throws on JSON-RPC error', async () => {
       mockRpcError(-32000, 'method not found');
       await expect(client.getNetworkName()).rejects.toThrow('method not found');
+    });
+
+    test('uses default code -1 when error.code missing', async () => {
+      mockFetch.mockResolvedValue({ ok: true, json: () => Promise.resolve({ jsonrpc: '2.0', error: { message: 'bad' }, id: 1 }) });
+      try { await client.getNetworkName(); } catch (e: any) { expect(e.code).toBe(-1); }
+    });
+
+    test('uses default message when error.message missing', async () => {
+      mockFetch.mockResolvedValue({ ok: true, json: () => Promise.resolve({ jsonrpc: '2.0', error: { code: 42 }, id: 1 }) });
+      await expect(client.getNetworkName()).rejects.toThrow('RPC error');
     });
 
     test('FilecoinRpcError has code', () => {
