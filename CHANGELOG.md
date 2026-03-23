@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/winstain/filecoin-cli/compare/filecoin-cli-v1.1.0...filecoin-cli-v1.2.0) (2026-03-23)
+
+
+### Features
+
+* add high-level store and retrieve commands ([98d439f](https://github.com/winstain/filecoin-cli/commit/98d439fd1790711cc09ccbe239ea6c22ca8d6482))
+* add high-level store and retrieve commands ([e0a5351](https://github.com/winstain/filecoin-cli/commit/e0a5351e86092e930f4d049da62afcb57d113c1d))
+
 ## [1.1.0](https://github.com/winstain/filecoin-cli/compare/filecoin-cli-v1.0.0...filecoin-cli-v1.1.0) (2026-03-20)
 
 
